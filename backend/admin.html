@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>链接生成后台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>为合作伙伴生成链接</h1>
+        <form id="link-form">
+            <input type="text" id="partner-name" placeholder="合作伙伴名称 (如: PartnerA)" required style="width: 90%; padding: 10px; margin-bottom: 10px;">
+            <input type="text" id="site-id" placeholder="渠道ID (如: PartnerA_tiktok_1)" required style="width: 90%; padding: 10px; margin-bottom: 10px;">
+            <button type="submit" class="download-button">生成链接</button>
+        </form>
+        <div id="result" style="margin-top: 20px; word-wrap: break-word; background: #eee; padding: 10px; border-radius: 5px;">
+            <p>生成的链接将显示在这里</p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('link-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+            
+            const partnerName = document.getElementById('partner-name').value;
+            const siteId = document.getElementById('site-id').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch('http://localhost:3000/api/generate-link', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ partnerName, siteId })
+                });
+                const data = await response.json();
+                if(response.ok) {
+                    resultDiv.innerHTML = `<p><strong>成功!</strong> 请将此链接发给合作伙伴:</p><p style="color: blue;">${data.finalLink}</p>`;
+                } else {
+                    resultDiv.textContent = `错误: ${data.error}`;
+                }
+            } catch(error) {
+                resultDiv.textContent = '请求服务器失败，请检查后端是否已启动。';
+            }
+        });
+    </script>
+</body>
+</html>
