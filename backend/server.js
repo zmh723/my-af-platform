@@ -10,7 +10,7 @@ app.use(express.json());
 
 // 您的基础信息
 const BASE_AF_LINK = 'https://app.appsflyer.com/id1447274646?pid=nianticinj4f_int&c=adaltar_220';
-const H5_LANDING_PAGE_URL = 'http://192.168.196.112:5500/index.html'; // 这是VS Code Live Server的默认地址，后面会改
+const H5_LANDING_PAGE_URL = const H5_LANDING_PAGE_URL = process.env.H5_LANDING_PAGE_URL || 'http://127.0.0.1:5500/index.html'; // 这是VS Code Live Server的默认地址，后面会改
 
 // 定义一个API接口，路径是 /api/generate-link，方法是 POST
 app.post('/api/generate-link', (req, res) => {
